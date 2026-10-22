@@ -27,9 +27,8 @@ jobs:
       # Bước 4: Thực thi kiểm thử bằng Newman CLI với dữ liệu từ users.csv
       - name: Run API Tests with Newman
         run: >
-          newman run ReqRes_Collection.json 
-          -e ReqRes_Environment.json 
-          -d users.csv 
+          newman run ReqRes_Environment.json 
+          -e ReqRes.postman_collection.json 
           --reporters cli,htmlextra 
           --reporter-htmlextra-export report.html
 
