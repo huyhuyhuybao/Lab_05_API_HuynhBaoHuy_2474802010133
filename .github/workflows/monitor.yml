@@ -1,0 +1,41 @@
+name: Automated API Tests (CI/CD)
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    steps:
+      # Bước 1: Checkout mã nguồn từ Repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Bước 2: Cài đặt môi trường Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Bước 3: Cài đặt Newman CLI và thư viện xuất báo cáo dạng HTML
+      - name: Install Newman and HTML Extra Reporter
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+
+      # Bước 4: Thực thi kiểm thử bằng Newman CLI với dữ liệu từ users.csv
+      - name: Run API Tests with Newman
+        run: >
+          newman run ReqRes_Collection.json 
+          -e ReqRes_Environment.json 
+          -d users.csv 
+          --reporters cli,htmlextra 
+          --reporter-htmlextra-export report.html
+
+      # Bước 5: Upload tệp báo cáo report.html thành Artifact
+      - name: Upload Test Report Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: newman-test-report
+          path: report.html
