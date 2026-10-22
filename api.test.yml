@@ -1,0 +1,4 @@
+run: >
+  newman run ReqRes.postman_collection.json 
+  -e ReqRes_Environment.json 
+  -d users.csv
